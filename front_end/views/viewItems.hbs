@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Dictionary Demo</title>
+  <link rel="icon" type="image/png" href="chuck.png">
+  <style>
+
+        html, body {
+          margin:0;
+          padding: 0;
+          height: 100%;
+        }
+
+
+      /* add a scroll to the table */
+      #table-wrapper {
+        position:relative;
+      }
+      #table-scroll {
+        height: auto;
+        overflow:auto;  
+        margin-top:20px;
+      }
+      #table-wrapper table {
+        width:100%;
+
+      }
+
+      /* table */
+      table {
+        font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        empty-cells: show;
+      }
+
+      th {
+        padding-top: 5px;
+        position: sticky;
+        color: #14375A ;
+        
+      }
+
+      td, th {
+        border: 0.5px solid #dddddd;
+        text-align: left,
+        padding: 8px;
+        border: 0.5px solid black;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+
+
+    h2 {
+      font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+      color: #14375A;
+      text-align: center;
+    }
+
+
+    /* search box */
+    .searchDiv {
+      background-image: url("txdot-landing-back.jpg");
+      background-size: 100%;
+      height: 300px;
+      position: relative;
+    }    
+
+    .searchDiv input[type="text"] {
+      position:absolute;
+      left:20%;
+      top:52%;
+      width:30%;
+      background-color:white;
+      color:grey;
+
+    }
+
+
+    #searchInputA {
+      display: block;
+      width: 35%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 0.5px solid black;
+      margin-bottom: 12px;
+      border-radius: 8px;
+    }
+
+    #searchInputB {
+      display: none;
+      width: 35%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 0.5px solid black;
+      margin-bottom: 12px;
+      border-radius: 8px;
+    }
+
+    /* radio button styling from w3schools */
+    /* The container */
+    .button {
+      display: inline-block;
+      position: relative;
+      padding: 10px, 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 20px;
+      left:20%;
+      top:40%;
+      width:10%;
+      background-color: grey;
+      color: white;
+      text-align: center;
+      border: grey;
+
+    }
+    /* todo, get field name button to load blue */
+    .button:active{
+      background-color: #14375A;
+    }
+    .button:focus{
+      background-color:#14375A;
+    }
+
+    .button:hover{
+      background-color:#14375A;
+    }
+
+    /* Hide the browser's default radio button */
+    .button input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+
+  </style>
+
+</head>
+  {{> header}}
+<body>
+
+  <h2> Search the GIS Data Dictionary </h2>
+ 
+
+  <div class="searchDiv">
+    {{!-- Search boxes go here- all but one are hidden on page load, controlled by CSS --}}
+    <p><input class="searchLayer" type="text" id="searchInputB" onfocus="this.value=''" onkeyup="searchLayerFunction()" placeholder="Search by Layer (ex. City)..." ></p>
+    <p><input class="searchName" type="text" id="searchInputA" onfocus="this.value=''" onkeyup="searchNameFunction()" placeholder="Search by Field Name (ex. RTE_NM)..." ></p>
+    
+    <input type="button" class="button" id="button-field-search" name="selectSearch"  onclick="changeSearch('searchInputA', 'searchInputB');" value="Field Name">
+    <input type="button"  class="button"  name="selectSearch" onclick="changeSearch('searchInputB', 'searchInputA');" value="Layer (Source)">
+
+  </div>
+
+  <div id = "table-wrapper">
+    <div id = "table-scroll">
+    {{!-- This is a user update table --}}
+    <table id="dictTable">
+      <thead>
+        <tr class="tblheader">
+            <th>Field Name</th>
+            <th>Alias</th>
+            <th>Example</th>
+            <th>Source</th>
+            <th>Field Description</th>
+            <th>Applications</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#if combinedCollections}}
+          {{#each combinedCollections}}
+              <tr>
+                  {{!-- Field Name --}}
+                  <td>{{this.name}}</td>
+                  {{!-- Alias --}}
+                  <td>{{this.alias}}</td>
+                  
+                  {{!-- accessing domain values here --}}
+                  <td>
+                    {{#each domain.codedValues}}
+                      {{{this.code}}} : {{{this.name}}}<br>
+                    {{/each}}
+                  </td>  
+
+                  {{!-- Source field, here I'm iterating over the layer array, then using "lookup ../item_id @index" to 
+                  grab the item_id (layer's unique id) for the URL. Note that ODP is the item_id + "_0", while AGO is simply
+                  the item_id. This will open both AGO & ODP --}}
+                  <td>
+                    {{#each layer}}            
+                      <a href=#, onclick="window.open('https://gis-txdot.opendata.arcgis.com/datasets/{{lookup ../item_id @index}}_0/explore?location=30.538659%2C-100.152053%2C6.71');
+                                          window.open('https://txdot.maps.arcgis.com/home/item.html?id={{lookup ../item_id @index}}');">                 
+                          {{this}}
+                      </a><br>
+                    {{/each}}
+                  </td>
+
+                  {{!-- USER INPUT COLLECTION --}}
+
+                  {{!-- Need to grab items from "fromUser" array because of the $lookup "joining"
+                  the esri api and user input collection (kind of like joining two tableS). Using the last item to show current update --}}
+                  
+                  {{!-- Field Description --}}
+                  <td>
+                    {{#each fromUser}} 
+                      {{#if @last}} 
+                        {{fieldDescription}} 
+                      {{/if}} 
+                    {{/each}}
+                  </td>
+
+                  {{!-- Applications --}}
+                  <td>
+                  {{!-- Showing the applications here --}}
+                    {{#each fromUser}} 
+                      {{#if @last}} 
+                        {{#each applicableApplications}}
+                          {{this}}<br>
+                        {{/each}}  
+                      {{/if}} 
+                    {{/each}}
+                  </td>
+              </tr>
+          {{/each}}
+      {{/if}}
+      </tbody>
+    </table>
+   </div>
+  </div> 
+
+  <script type="text/javascript">
+
+    // radio button function to switch between two search functions
+    function changeSearch(elemToShow,elemToHide) {
+       document.getElementById(elemToShow).style.display = "block";
+       document.getElementById(elemToHide).style.display = "none";
+    }
+  
+
+
+    // modified these functions from the eariler version of the data dict. demo
+    //search by field name
+    window.onload = function() {
+      var rows = document.querySelectorAll('tr:not(.tblheader)');
+
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+      }
+
+      // button function to load default color
+      function loadBlue() {
+        document.getElementById("button-field-search").style.backgroundColor = "black";
+      }
+
+    }
+
+    // search functions
+    // search by field name
+    function searchNameFunction() {
+      var input, filter, table, tr, td, i, name;
+      
+      input = document.getElementById("searchInputA");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dictTable");
+      tr = table.getElementsByTagName("tr");
+      
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          name = td.textContent || td.innerText;
+          if (name.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+      var rows = document.querySelectorAll('tr:not(.tblheader)');
+
+      if (input.value.length == 0) {
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+       }
+      }
+    }
+
+
+      // search by layer
+      function searchLayerFunction() {
+      var input, filter, table, tr, td, i, layer;
+      
+      input = document.getElementById("searchInputB");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dictTable");
+      tr = table.getElementsByTagName("tr");
+      
+      for (i = 0; i < tr.length; i++) {
+        // change the td to "3" to get source
+        td = tr[i].getElementsByTagName("td")[3];
+        if (td) {
+          layer = td.textContent || td.innerText;
+          if (layer.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+      var rows = document.querySelectorAll('tr:not(.tblheader)');
+
+      if (input.value.length == 0) {
+      for (var i = 0; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+       }
+      }
+    }
+  </script>
+  
+
+</body>
+{{>footer}}
+</html>

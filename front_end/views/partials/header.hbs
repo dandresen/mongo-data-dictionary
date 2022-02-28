@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<header>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body {
+  margin: 5;
+  font-family: Helvetica,Arial,sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: gray;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.active, a.topnav:hover {
+  background-color: #666;
+  color: white;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+a {
+  color: #14375A;
+  font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+a:hover {
+  font-weight: bold;
+  font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+
+#bannerA {
+  background-color: #14375A;
+  height: 70px;
+  padding: 0px 10px 0px 0px;
+}
+
+#bannerA a {
+  float: right;
+  display: block;
+  color: #ECEDED;
+  margin-top: 0px;
+  padding: 5px 0px 0px 0px;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#banner a:hover {
+  font-weight: bold;
+  font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+img {
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: 3px;
+  z-index: 100;
+}
+
+
+
+</style>
+
+<body>
+
+{{!-- came from existing data dict example --}}
+<div id= "bannerA">
+  <a href="./CityCountyDistrict.html" target=_blank>City County District Search</a>
+  <a href="https://www.txdot.gov/inside-txdot/division/transportation-planning/roadway-inventory.html" target=_blank>Roadway Inventory&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+  <a href="http://gis-txdot.opendata.arcgis.com" target=_blank>Data Portal&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+  <a href="https://www.txdot.gov/inside-txdot/division/transportation-planning.html" target=_blank>TPP&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+</div>
+
+<img src="logo.png" />
+
+<div id="myDiv" class="topnav">
+  <a class="topnav" href="/viewItems">Search</a>
+  <a class="topnav" href="/update">Update</a>
+</div>
+
+<link rel="icon" type="image/png" href="chuck.png"
+
+</body>
+</header>

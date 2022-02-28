@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+  <meta charset="UTF-8">
+
+<head>
+      <link rel="icon" type="image/png" href="cat.png">
+
+    <style>
+        html, body {
+            margin:0;
+            padding: 0;
+            height: 100%;
+        }
+
+
+[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button[type=submit] {
+        width: 50%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+    #form {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+
+    h2 {
+        font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: #14375A;
+        text-align: center;
+    }
+
+    label {
+        font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: #14375A;
+        text-align: left;
+
+    }
+    </style>
+
+</head>
+{{> header}}
+<body>
+
+
+
+    <h2> Update Field Description and Applications </h2>
+
+    <div id="form">
+        <form action="/update" method="POST">
+            <label for='fieldname'>Field Name</label>
+            <select id="fieldname" name="fieldname">
+                {{!-- here is where the list of fields is created--}}
+                {{#each esri}}
+                    <option value='{{name}}'>{{name}}</option>
+                {{/each}}
+            </select>
+
+            <label for='applications'>Applications</label>
+            <select id="applications" name="applicableApplications" multiple>
+                {{!-- here is where the apps array is being hit to 
+                create items for the dropdown. Note, just using the first
+                document because all of the documents have the array --}}
+                {{#each esri}}
+                    {{#if @last}}
+                        {{#each all_applications}}
+                            {{!-- {{#select app}} --}}
+                                <option value='{{this}}'>{{this}}</option>
+                            {{!-- {{/select}} --}}
+                        {{/each}}
+                    {{/if}}
+                {{/each}}
+            </select>
+           
+            <label for='description'>Field Description</label>
+            <input type="text" id="description" placeholder="This field represents..." name="fieldDescription">
+
+            {{!-- <label for='dataExample'>Data Example</label>
+            <input type="text" id="dataExample" placeholder="dataExample" name="applicableApplications"> --}}
+
+            <label for='email'>Email</label>
+            <input type="text" id="email" placeholder="Use TxDOT email" name="email">
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+</body>
+{{>footer}}
+</html>
